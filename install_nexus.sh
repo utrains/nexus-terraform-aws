@@ -23,4 +23,4 @@ cd nexus-3.22.1-02/bin/
 ./nexus start
 
 # give access to key pair
-chmod 400 nexus_key_pair.pem
+sudo chmod 400 nexus_key_pair.pem
