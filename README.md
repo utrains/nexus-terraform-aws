@@ -1,4 +1,4 @@
-# nexus-terraform-aws
+# nexus terraform aws
 
 ## Setup the environment 
 ```
