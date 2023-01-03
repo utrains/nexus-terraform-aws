@@ -1,5 +1,4 @@
 #!/bin/bash
-
 #### Made by Utrains on 30-12-2022
 
 sudo yum update -y
