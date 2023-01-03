@@ -7,5 +7,5 @@ output "ssh_connection" {
 }
 
 output "nexus_admin_password" {
-    value = "/home/ec2-user/nexus/sonatype-work/nexus3/admin.password"
+    value = "/home/ec2-user/sonatype-work/nexus3/admin.password"
 }
