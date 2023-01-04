@@ -15,5 +15,5 @@ rm -f nexus.tar.gz
 sudo mv nexus-3.45.0-01 nexus
 
 # Start Nexus and check status
-sh /home/ec2-user/nexus/bin/nexus start
-sh /home/ec2-user/nexus/bin/nexus status
+sh ~/nexus/bin/nexus start
+sh ~/nexus/bin/nexus status
