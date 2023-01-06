@@ -5,7 +5,7 @@ pipeline {
       stage ("terraform init") {
           steps {
               sh 'terraform init' 
-              sh 'cd nexus-terraform-aws/'
+              sh 'cd nexus-terraform-aws'
           }
       }
         
