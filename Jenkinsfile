@@ -4,12 +4,6 @@ pipeline {
         terraform 'terraform'
     }
     stages {
-        stage("Git checkout"){
-            steps{
-                git 'https://github.com/utrains/nexus-terraform-aws.git'
-                sh 'cd nexus-terraform-aws'
-            }
-        }
         stage ("terraform init") {
             steps {
                 sh 'terraform init'
