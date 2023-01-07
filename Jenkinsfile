@@ -10,7 +10,7 @@ pipeline {
                 sh 'terraform init'
             }
         }
-        stage ("terraform Action") {
+        stage ("terraform ${action}") {
             steps {
                 withAWS(credentials: 'aws-credentials') {
                     echo "Terraform action is --> ${action}"
