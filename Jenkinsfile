@@ -4,9 +4,6 @@ pipeline {
     terraform 'terraform'
   }
   stages {
-    stage ("Git checkout"){
-      git 'https://github.com/utrains/nexus-terraform-aws.git'
-    }
     stage ("terraform init") {
       steps {
           sh 'terraform init' 
@@ -16,9 +13,10 @@ pipeline {
     stage ("terraform Action") {
       steps {
         withAWS(credentials: 'aws credentials', region: 'us-east-1') {
-            sh 'terraform apply -auto-approve'
+            echo "Terraform action is --> ${action}"
+            sh ('terraform ${action} --auto-approve')
         }
      }
-   }
- }
+    }
+  }
 }
