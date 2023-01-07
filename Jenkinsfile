@@ -5,7 +5,8 @@ pipeline {
     }
     stages {
         stage ("terraform init") {
-            steps {
+            steps 
+                sh 'ls'
                 sh 'terraform init'
             }
         }
