@@ -1,6 +1,7 @@
 # configured aws provider with proper credentials
 provider "aws" {
   region    = var.aws_region
+  profile   = "default"
 }
 
 # create default vpc if one does not exit
@@ -92,7 +93,7 @@ resource "local_file" "ssh_key" {
 }
 
 # launch the ec2 instance and install nexus
-resource "aws_instance" "nexus_instance" {
+resource "aws_instance" "ec2_instance" {
   ami                    = data.aws_ami.amazon_linux_2.id
   instance_type          = var.aws_instance_type
   subnet_id              = aws_default_subnet.default_az1.id
@@ -113,7 +114,7 @@ resource "null_resource" "name" {
     type        = "ssh"
     user        = "ec2-user"
     private_key = file(local_file.ssh_key.filename)
-    host        = aws_instance.nexus_instance.public_ip
+    host        = aws_instance.ec2_instance.public_ip
   }
 
   # copy the install-nexus.sh file from your computer to the ec2 instance 
@@ -131,5 +132,20 @@ resource "null_resource" "name" {
   }
 
   # wait for ec2 to be created
-  depends_on = [aws_instance.nexus_instance]
+  depends_on = [aws_instance.ec2_instance]
+}
+
+# print the url of the nexus server
+output "nexus_server_url" {
+    value = join ("", ["http://", aws_instance.ec2_instance.public_dns, ":", "8081"])
+}
+
+# print the ssh command to connect to the nexus server
+output "ssh_connection" {
+    value = join ("", ["ssh -i nexus_key_pair.pem ec2-user@", aws_instance.ec2_instance.public_dns])
+}
+
+# print the path to get the nexus admin password
+output "nexus_admin_password" {
+    value = "~/sonatype-work/nexus3/admin.password"
 }
