@@ -14,5 +14,5 @@ terraform destroy --auto-approve
 ```
 ## Get the admin password of nexus server 
 ```
-cat /home/ec2-user/nexus/sonatype-work/nexus3/admin.password
+sudo cat ~/nexus/sonatype-work/nexus3/admin.password
 ```
