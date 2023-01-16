@@ -1,6 +1,7 @@
 # configured aws provider with proper credentials
 provider "aws" {
   region    = var.aws_region
+  profile   = "default"
 }
 
 # create default vpc if one does not exit
@@ -98,7 +99,7 @@ resource "aws_instance" "ec2_instance" {
   subnet_id              = aws_default_subnet.default_az1.id
   vpc_security_group_ids = [aws_security_group.nexus_ec2_security_group.id]
   key_name               = aws_key_pair.nexus_key.key_name
-  user_data            = file("install_nexus.sh")
+  # user_data            = file("install-nexus.sh")
 
   tags = {
     Name = "utrains Nexus Server and ssh security group"
@@ -114,6 +115,35 @@ resource "null_resource" "name" {
     user        = "ec2-user"
     private_key = file(local_file.ssh_key.filename)
     host        = aws_instance.ec2_instance.public_ip
+  }
+
+  # copy the install-nexus.sh file from your computer to the ec2 instance 
+  /* provisioner "file" {
+    source      = "install-nexus.sh"
+    destination = "/tmp/install-nexus.sh"
+  } */
+
+  # set permissions and run the install_nexus.sh file
+  provisioner "remote-exec" {
+    inline = [
+      "sudo yum update -y",
+
+      ## Install Java 8:
+      "sudo yum install java-1.8.0-openjdk -y",
+
+      # download the latest version of nexus
+      "sudo wget https://download.sonatype.com/nexus/3/nexus-3.45.0-01-unix.tar.gz",
+
+      "sudo yum upgrade -y",
+      # Extract the downloaded archive file
+      "tar -xvzf nexus-3.45.0-01-unix.tar.gz",
+      "rm -f nexus-3.45.0-01-unix.tar.gz",
+      "sudo mv nexus-3.45.0-01 nexus",
+
+      # Start Nexus and check status
+      "sh ~/nexus/bin/nexus start",
+      "sh ~/nexus/bin/nexus status",
+        ]
   }
 
   # wait for ec2 to be created
@@ -132,5 +162,5 @@ output "ssh_connection" {
 
 # print the path to get the nexus admin password
 output "nexus_admin_password" {
-    value = "~/sonatype-work/nexus3/admin.password"
+    value = "sudo cat ~/sonatype-work/nexus3/admin.password"
 }

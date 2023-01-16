@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#Made by Utrains on 30-12-2022
+
+sudo yum update -y
+
+# Install Java 8:
+sudo yum install java-1.8.0-openjdk -y
+
+# download the latest version of nexus
+sudo wget https://download.sonatype.com/nexus/3/nexus-3.45.0-01-unix.tar.gz
+
+sudo yum upgrade -y
+# Extract the downloaded archive file
+tar -xvzf nexus-3.45.0-01-unix.tar.gz
+rm -f nexus-3.45.0-01-unix.tar.gz
+sudo mv nexus-3.45.0-01 nexus
+
+# Start Nexus and check status
+sh ~/nexus/bin/nexus start
+sh ~/nexus/bin/nexus status
