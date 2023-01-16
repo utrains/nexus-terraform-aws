@@ -98,7 +98,7 @@ resource "aws_instance" "ec2_instance" {
   subnet_id              = aws_default_subnet.default_az1.id
   vpc_security_group_ids = [aws_security_group.nexus_ec2_security_group.id]
   key_name               = aws_key_pair.nexus_key.key_name
-  # user_data            = file("install-nexus.sh")
+  user_data            = file("install_nexus.sh")
 
   tags = {
     Name = "utrains Nexus Server and ssh security group"
@@ -114,20 +114,6 @@ resource "null_resource" "name" {
     user        = "ec2-user"
     private_key = file(local_file.ssh_key.filename)
     host        = aws_instance.ec2_instance.public_ip
-  }
-
-  # copy the install-nexus.sh file from your computer to the ec2 instance 
-  provisioner "file" {
-    source      = "install_nexus.sh"
-    destination = "/tmp/install_nexus.sh"
-  }
-
-  # set permissions and run the install_nexus.sh file
-  provisioner "remote-exec" {
-    inline = [
-        "sudo chmod +x /tmp/install_nexus.sh",
-        "sh /tmp/install_nexus.sh"
-        ]
   }
 
   # wait for ec2 to be created
